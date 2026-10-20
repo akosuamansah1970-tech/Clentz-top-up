@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131c">
+  <title>CLENT TOPUP | Ghana</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #10131c;
+      color: white;
+    }
+
+    header {
+      padding: 22px 18px;
+      background: #191e2b;
+      border-bottom: 1px solid #303747;
+    }
+
+    .logo {
+      color: #70f5b2;
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    header p {
+      margin-bottom: 0;
+      color: #aeb7c9;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 520px;
+      margin: auto;
+      padding: 22px 16px;
+    }
+
+    .hero {
+      padding: 24px 20px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #203d38, #202b43);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 29px;
+      margin: 0 0 12px;
+    }
+
+    .hero p {
+      color: #d0d9e4;
+      line-height: 1.6;
+    }
+
+    .card {
+      background: #191e2b;
+      border: 1px solid #303747;
+      padding: 20px;
+      border-radius: 18px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 9px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 14px;
+      background: #10131c;
+      color: white;
+      border: 1px solid #414b60;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 11px;
+      background: #70f5b2;
+      color: #10131c;
+      font-size: 16px;
+      font-weight: bold;
+      margin-top: 22px;
+      cursor: pointer;
+    }
+
+    .notice {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 10px;
+      background: #29283a;
+      color: #cdd3e3;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    #message {
+      margin-top: 15px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    footer {
+      padding: 25px 15px;
+      text-align: center;
+      color: #929caf;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">CLENT TOPUP ⚡</div>
+    <p>Your Ghanaian airtime and data shop</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Stay Connected. 📱</h1>
+      <p>
+        Choose your network and data bundle.
+        A simple place to start your next top-up.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Buy Data</h2>
+
+      <form id="orderForm">
+        <label for="network">Choose network</label>
+        <select id="network" required>
+          <option value="">Select your network</option>
+          <option value="MTN">MTN Ghana</option>
+          <option value="Telecel">Telecel Ghana</option>
+          <option value="AT">AT Ghana</option>
+        </select>
+
+        <label for="bundle">Choose data bundle</label>
+        <select id="bundle" required>
+          <option value="">Select a bundle</option>
+        </select>
+
+        <label for="phone">Recipient phone number</label>
+        <input
+          id="phone"
+          type="tel"
+          inputmode="numeric"
+          placeholder="e.g. 0241234567"
+          pattern="0[0-9]{9}"
+          maxlength="10"
+          required
+        >
+
+        <button type="submit">Continue</button>
+      </form>
+
+      <div id="message" role="status"></div>
+
+      <div class="notice">
+        DEMO WEBSITE: Bundle prices and selections are examples.
+        Payments and data delivery are not yet connected.
+        Do not submit real payment details.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 CLENT TOPUP · Ghana
+  </footer>
+
+  <script>
+    const bundles = {
+      MTN: [
+        { name: "1 GB - Demo", price: 5 },
+        { name: "2 GB - Demo", price: 10 },
+        { name: "5 GB - Demo", price: 20 }
+      ],
+      Telecel: [
+        { name: "1 GB - Demo", price: 5 },
+        { name: "2 GB - Demo", price: 10 },
+        { name: "5 GB - Demo", price: 20 }
+      ],
+      AT: [
+        { name: "1 GB - Demo", price: 5 },
+        { name: "2 GB - Demo", price: 10 },
+        { name: "5 GB - Demo", price: 20 }
+      ]
+    };
+
+    const network = document.getElementById("network");
+    const bundle = document.getElementById("bundle");
+    const message = document.getElementById("message");
+
+    network.addEventListener("change", () => {
+      bundle.innerHTML =
+        '<option value="">Select a bundle</option>';
+
+      (bundles[network.value] || []).forEach((item, index) => {
+        const option = document.createElement("option");
+        option.value = index;
+        option.textContent =
+          item.name + " — GH₵" + item.price.toFixed(2);
+        bundle.appendChild(option);
+      });
+
+      message.textContent = "";
+    });
+
+    document.getElementById("orderForm")
+      .addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const selectedNetwork = network.value;
+        const selectedBundle = bundles[selectedNetwork]?.[
+          Number(bundle.value)
+        ];
+        const phone = document.getElementById("phone").value;
+
+        if (!selectedBundle || !/^0[0-9]{9}$/.test(phone)) {
+          message.textContent =
+            "Please check your network, bundle and phone number.";
+          return;
+        }
+
+        message.textContent =
+          "Demo order prepared: " +
+          selectedNetwork + ", " +
+          selectedBundle.name + ", recipient " +
+          phone + ", example total GH₵" +
+          selectedBundle.price.toFixed(2) +
+          ". No payment has been made and no data has been sent.";
+      });
+  </script>
+</body>
+</html>
